@@ -200,7 +200,31 @@ footer{border-top:1px solid var(--line);padding:25px 0 35px;color:var(--muted);f
 .nav-instagram:hover img {
   filter: brightness(0) saturate(100%) invert(66%) sepia(79%) saturate(500%) hue-rotate(95deg);
   transform: scale(1.15);
-}</style>
+}
+@media (max-width: 580px) {
+  .story-band {
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 18px;
+  }
+
+  .story-band .art {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .story-band .art img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+}
+</style>
 </head>
 <body>
 <div class="topline"><div class="wrap"><span>Periodismo de fútbol · Argentina</span><span id="today">Miércoles 4 de noviembre de 2026</span></div></div>
