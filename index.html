@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101010">
+<title>Juego Abierto | Todo el fútbol al día</title>
+<style>
+:root{--bg:#101411;--panel:#191f1b;--panel2:#202923;--ink:#FFFFFF;--muted:#b5beb8;--line:#303a33;--accent:#18D978;--max:1180px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 40px));margin:auto}
+.topline{border-bottom:1px solid var(--line);color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.topline .wrap{display:flex;justify-content:space-between;padding:10px 0}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(16,16,16,.94);backdrop-filter:blur(12px);z-index:10}
+.head{display:flex;align-items:center;justify-content:space-between;min-height:78px;gap:24px}
+.brand{font-weight:950;font-size:27px;letter-spacing:-1.5px;white-space:nowrap}.brand span{color:var(--accent)}
+nav{display:flex;align-items:center;gap:26px}nav a{font-size:13px;color:#d3d3ce;font-weight:700;text-transform:uppercase;letter-spacing:.06em}nav a:hover,.textlink:hover{color:var(--accent)}
+.menu{display:none;background:none;border:1px solid var(--line);color:white;padding:8px 11px;border-radius:6px;font-size:18px}
+.breaking{background:var(--accent);color:#101010;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.breaking .wrap{display:flex;gap:15px;align-items:center;padding:9px 0}.breaking strong{background:#101010;color:var(--accent);padding:3px 7px;border-radius:2px}
+main{padding:34px 0 70px}.eyebrow{font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}
+.hero-grid{display:grid;grid-template-columns:1.55fr .85fr;gap:18px;margin-top:14px}
+.hero{min-height:440px;position:relative;overflow:hidden;border-radius:12px;background:linear-gradient(125deg,#3d4d29 0%,#1e2819 38%,#111 100%);display:flex;align-items:flex-end;padding:34px}
+.hero:before{content:"";position:absolute;width:390px;height:390px;border:1px solid rgba(24,217,120,.25);border-radius:50%;right:8%;top:5%;box-shadow:0 0 0 35px rgba(24,217,120,.035),0 0 0 75px rgba(24,217,120,.025)}
+.hero:after{content:"JA";position:absolute;right:8%;top:12%;font-size:clamp(110px,20vw,240px);font-weight:1000;letter-spacing:-.12em;color:rgba(255,255,255,.07)}
+.hero-content{position:relative;z-index:1;max-width:670px}.tag{display:inline-block;background:var(--accent);color:#111;padding:5px 9px;border-radius:3px;font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+h1{font-size:clamp(32px,5vw,58px);line-height:1.02;letter-spacing:-.055em;margin:15px 0}.hero p{color:#d2d6cb;max-width:570px;margin:0 0 18px;font-size:15px}.meta{font-size:11px;color:#c0c0b9;text-transform:uppercase;letter-spacing:.07em}
+.side-stack{display:grid;grid-template-rows:1fr 1fr;gap:18px}.side-story{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:25px;display:flex;flex-direction:column;justify-content:space-between;min-height:210px;position:relative;overflow:hidden}.side-story:after{content:"";position:absolute;width:150px;height:150px;border:1px solid #45483a;border-radius:50%;right:-45px;bottom:-70px}.side-story h2{font-size:24px;line-height:1.1;letter-spacing:-.035em;margin:12px 0;max-width:340px;position:relative;z-index:1}.side-story p{font-size:13px;color:var(--muted);margin:0;position:relative;z-index:1}
+.section-head{display:flex;align-items:end;justify-content:space-between;margin:48px 0 17px;border-bottom:1px solid var(--line);padding-bottom:12px}.section-head h2{font-size:24px;letter-spacing:-.04em;margin:0}.section-head span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:20px 0;flex-wrap:wrap}.filters{display:flex;gap:8px;flex-wrap:wrap}.filter{border:1px solid var(--line);background:transparent;color:#d4d4ce;padding:8px 13px;border-radius:99px;font-size:12px;font-weight:800;cursor:pointer}.filter.active,.filter:hover{background:var(--accent);color:#111;border-color:var(--accent)}
+.search{background:var(--panel);border:1px solid var(--line);color:white;padding:10px 13px;border-radius:7px;min-width:min(250px,100%);outline:none}.search:focus{border-color:var(--accent)}
+.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.news-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:transform .2s,border-color .2s}.news-card:hover{transform:translateY(-3px);border-color:#777}.art{height:150px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#2c3524,#161a14)}.art:before{content:"";position:absolute;width:170px;height:170px;border:1px solid rgba(24,217,120,.3);border-radius:50%;box-shadow:0 0 0 20px rgba(24,217,120,.04),0 0 0 42px rgba(24,217,120,.03)}.art b{font-size:56px;font-weight:1000;letter-spacing:-.1em;color:rgba(255,255,255,.15);z-index:1}.art.blue{background:linear-gradient(135deg,#1b3340,#101719)}.art.red{background:linear-gradient(135deg,#462a2a,#191212)}.art.gold{background:linear-gradient(135deg,#49402a,#17150f)}
+.card-body{padding:18px}.card-body .meta{font-size:10px}.card-body h3{font-size:20px;line-height:1.15;letter-spacing:-.035em;margin:10px 0}.card-body p{font-size:13px;color:var(--muted);margin:0 0 16px}.textlink{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+.art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.art:before {
+  display: none;
+}
+
+.art b {
+  display: none;
+}
+.empty{display:none;color:var(--muted);padding:25px 0}
+.local-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.match{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.match small{display:block;color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:.1em;font-size:10px}.match h3{margin:7px 0 0;font-size:19px;letter-spacing:-.03em}.match time{font-size:20px;font-weight:900;white-space:nowrap}.match p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.story-band{margin-top:50px;padding:28px;border:1px solid #3c4430;border-radius:12px;background:linear-gradient(110deg,#20291a,#151713);display:flex;justify-content:space-between;align-items:center;gap:20px}
+.story-band .art {
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+}
+
+.story-band .art:before {
+  display: none !important;
+}
+
+.story-band .art img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}.story-band h2{font-size:28px;letter-spacing:-.05em;margin:5px 0}.story-band p{color:#c2c7b9;margin:0;font-size:13px}.story-band .mark{font-size:60px;font-weight:1000;color:var(--accent);letter-spacing:-.1em}
+.sources{margin-top:45px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.sources a{color:#d8e8b8;text-decoration:underline;text-underline-offset:3px}
+footer{border-top:1px solid var(--line);padding:25px 0 35px;color:var(--muted);font-size:12px}.foot{display:flex;justify-content:space-between;gap:20px;align-items:center}.foot strong{font-size:20px;color:white;letter-spacing:-1px}.foot strong span{color:var(--accent)}
+@media(max-width:800px){.hero-grid{grid-template-columns:1fr}.hero{min-height:390px}.side-stack{grid-template-columns:1fr 1fr;grid-template-rows:auto}.side-story{min-height:190px}.news-grid{grid-template-columns:repeat(2,1fr)}nav{gap:14px}nav a{font-size:11px}}
+@media(max-width:580px){.wrap{width:min(100% - 28px,var(--max))}.topline .wrap{font-size:9px}.head{min-height:66px}.brand{font-size:23px}.menu{display:block}nav{display:none;position:absolute;top:66px;left:0;right:0;background:#151515;border-bottom:1px solid var(--line);padding:18px 20px;flex-direction:column;align-items:flex-start}nav.open{display:flex}.breaking .wrap{font-size:10px}.hero{min-height:410px;padding:23px}.hero p{font-size:13px}.side-stack{grid-template-columns:1fr}.side-story{min-height:160px;padding:20px}.side-story h2{font-size:21px}.section-head{margin-top:36px}.section-head h2{font-size:21px}.toolbar{align-items:stretch}.search{width:100%}.news-grid{grid-template-columns:1fr}.art{height:135px}.local-grid{grid-template-columns:1fr}.story-band{padding:22px}.story-band h2{font-size:23px}.story-band .mark{font-size:44px}.foot{align-items:flex-start;flex-direction:column}}
+.match-teams {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 16px !important;
+}
+
+.team {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.team img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+.hero,
+.side-story {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero {
+  background-color: #101411;
+}
+
+.side-story {
+  background-color: #191f1b;
+}
+.nav-live {
+  background: #e32636 !important;
+  color: #ffffff !important;
+  padding: 7px 13px;
+  border-radius: 5px;
+  font-weight: 900 !important;
+  letter-spacing: .5px;
+}
+
+.nav-live:hover {
+  background: #ffffff !important;
+  color: #e32636 !important;
+}
+.card-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.news-card {
+  cursor: pointer;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.12);
+}
+
+.card-link .textlink {
+  display: inline-block;
+}
+/* Efecto al pasar el mouse por las noticias principales */
+.hero-link .hero,
+.side-link .side-story {
+  cursor: pointer;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.hero-link:hover .hero,
+.side-link:hover .side-story {
+  transform: translateY(-4px);
+  filter: brightness(1.12);
+}
+
+.story-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.story-link .story-band {
+  cursor: pointer;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.story-link:hover .story-band {
+  transform: translateY(-4px);
+  filter: brightness(1.12);
+}
+
+.match-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.match-link .match {
+  cursor: pointer;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.match-link:hover .match {
+  transform: translateY(-4px);
+  filter: brightness(1.12);
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.nav-instagram {
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+}
+
+.nav-instagram img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: filter .2s ease, transform .2s ease;
+}
+
+.nav-instagram:hover img {
+  filter: brightness(0) saturate(100%) invert(66%) sepia(79%) saturate(500%) hue-rotate(95deg);
+  transform: scale(1.15);
+}</style>
+</head>
+<body>
+<div class="topline"><div class="wrap"><span>Periodismo de fútbol · Argentina</span><span id="today">Miércoles 4 de noviembre de 2026</span></div></div>
+<header>
+  <div class="wrap head">
+
+<div class="brand-group">
+  <a class="brand" href="#">JUEGO <span>ABIERTO</span></a>
+
+  <a href="https://www.instagram.com/juegoabierto_/"
+     target="_blank"
+     class="nav-instagram"
+     aria-label="Instagram de Juego Abierto">
+    <img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\instagram.png" alt="Instagram">
+  </a>
+</div>
+
+    <button class="menu" id="menu" aria-label="Abrir menú">☰</button>
+
+    <nav id="nav">
+      <a href="#actualidad">Actualidad</a>
+      <a href="#LPF">LPF</a>
+      <a href="#regional">Regional</a>
+      <a href="#calculadora">Calculadora</a>
+      <a href="https://www.promiedos.com.ar/" class="nav-live">EN VIVO</a>
+    </nav>
+
+  </div>
+</header>
+<div class="breaking"><div class="wrap"><strong>En foco</strong><span>La tabla anual se define: Boca, Argentinos y Rosario Central llegan con chances</span></div></div>
+<main class="wrap">
+<div class="eyebrow">La portada · 04.11.2026</div>
+
+<section class="hero-grid">
+
+  <a href="https://tntsports.com.ar/ligaprofesional/fecha-hora-confirmado-definicion-tabla-anual-20261102-0014.html" class="hero-link">
+    <article class="hero" style="background-image: linear-gradient(to top, rgba(0,0,0,.95), rgba(0,0,0,.15)), url('C:/Users/Lucas/Downloads/pagina juego abierto/imagenes/tabla-anual.jpg');">
+
+      <div class="hero-content">
+        <span class="tag">Torneo Clausura · Fecha 16</span>
+        <h1>Tres equipos, un objetivo: la definición de la tabla anual</h1>
+        <p>Boca, Argentinos Juniors y Rosario Central jugarán en simultáneo el sábado. La última fecha también definirá lugares en las copas internacionales y los cruces de playoffs.</p>
+        <div class="meta">LPF · 4 de noviembre de 2026</div>
+      </div>
+
+    </article>
+  </a>
+
+  <div class="side-stack">
+
+    <a href="https://www.tycsports.com/liga-profesional-de-futbol/tabla-anual-2026-clasificacion-libertadores-sudamericana-2027-id751165.html" class="side-link">
+      <article class="side-story" style="background-image: linear-gradient(to top, rgba(0,0,0,.95), rgba(0,0,0,.25)), url('C:/Users/Lucas/Downloads/pagina juego abierto/imagenes/copas.jpg');">
+
+        <div>
+          <span class="eyebrow">Copas internacionales</span>
+          <h2>La pelea por ingresar a las copas internacionales</h2>
+          <p>Los equipos que buscan asegurar su lugar en las próximas competencias continentales.</p>
+        </div>
+
+        <div class="meta">LPF · 4 de noviembre</div>
+      </article>
+    </a>
+
+    <a href="https://www.tycsports.com/liga-profesional-de-futbol/torneo-clausura-cruces-playoffs-octavos-de-final-cuadro-fase-final-liga-profesional-2026-id766879.html" class="side-link">
+      <article class="side-story" style="background-image: linear-gradient(to top, rgba(0,0,0,.95), rgba(0,0,0,.25)), url('C:/Users/Lucas/Downloads/pagina juego abierto/imagenes/playoffs.jpg');">
+
+        <div>
+          <span class="eyebrow">Torneo Clausura</span>
+          <h2>La definición de los últimos lugares en los playoffs</h2>
+          <p>Varios equipos llegan a la última fecha con la ilusión de meterse entre los clasificados.</p>
+        </div>
+
+        <div class="meta">LPF · 4 de noviembre</div>
+      </article>
+    </a>
+
+  </div>
+</section>
+
+<section id="actualidad">
+<div class="section-head"><h2>Últimas noticias</h2><span>Actualizado · 4 NOV 2026</span></div>
+
+<div class="toolbar">
+<div class="filters" id="filters">
+<button class="filter active" data-filter="Todas">Todas</button>
+<button class="filter" data-filter="Argentina">Argentina</button>
+<button class="filter" data-filter="Selección">Selección</button>
+<button class="filter" data-filter="Internacional">Internacional</button>
+<button class="filter" data-filter="Regional">Regional</button>
+</div>
+<input class="search" id="search" type="search" placeholder="Buscar noticias..." aria-label="Buscar noticias">
+</div>
+
+<div class="news-grid" id="news">
+
+<article class="news-card" data-category="Argentina Regional" data-title="central jugará en simultáneo por la tabla anual">
+<a class="card-link" href="https://rosariodeportes.com/central-definira-la-tabla-anual-el-sabado-y-newells-cerrara-el-clausura-el-domingo/">
+<div class="art"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\roscentral.jpeg" alt="Rosario Central"></div>
+<div class="card-body">
+<div class="meta">Regional · Rosario Central</div>
+<h3>Central jugará en simultáneo por la tabla anual</h3>
+<p>El Canalla recibirá a Estudiantes de Río Cuarto el sábado 7, a las 17.30, en el Gigante de Arroyito.</p>
+</div>
+</a>
+</article>
+
+<article class="news-card" data-category="Argentina Regional" data-title="newells cerrará el clausura ante instituto">
+<a class="card-link" href="https://rosariodeportes.com/central-definira-la-tabla-anual-el-sabado-y-newells-cerrara-el-clausura-el-domingo/" >
+<div class="art red"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\newells.jpg" alt="Newell's Old Boys"></div>
+<div class="card-body">
+<div class="meta">Regional · Newell's</div>
+<h3>Newell's cerrará el Clausura ante Instituto</h3>
+<p>La Lepra visitará Córdoba el domingo 8 de noviembre, desde las 19.30, por la última fecha.</p>
+</div>
+</a>
+</article>
+
+<article class="news-card" data-category="Argentina" data-title="afa confirmó el cronograma de la fecha 16">
+<a class="card-link" href="https://www.afa.com.ar/es/posts/cronograma-de-la-fecha-16-de-la-liga-profesional">
+<div class="art blue"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\ligaarg.jpg" alt="Fútbol argentino"></div>
+<div class="card-body">
+<div class="meta">Argentina · Liga Profesional</div>
+<h3>La AFA confirmó el cronograma de la fecha 16</h3>
+<p>La jornada definirá la tabla anual, los cupos internacionales y los cruces de playoffs.</p>
+</div>
+</a>
+</article>
+
+<article class="news-card" data-category="Selección Argentina" data-title="scaloni convocó 28 jugadores para los amistosos de noviembre">
+<a class="card-link" href="https://www.reuters.com/sports/soccer/argentina-name-first-squad-post-messi-era-november-friendlies-2026-11-03/">
+<div class="art gold"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\scaloni.jpg" alt="Lionel Scaloni"></div>
+<div class="card-body">
+<div class="meta">Selección · Argentina</div>
+<h3>Scaloni convocó a 28 jugadores para noviembre</h3>
+<p>Argentina jugará ante Uruguay en La Bombonera y ante Costa Rica en el Kempes.</p>
+</div>
+</a>
+</article>
+
+<article class="news-card" data-category="Internacional" data-title="champions league la agenda de este martes">
+<a class="card-link" href="https://fbref.com/en/matches/2026-11-03">
+<div class="art blue"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\champions.jpg" alt="Champions League"></div>
+<div class="card-body">
+<div class="meta">Internacional · Champions League</div>
+<h3>Continúa la cuarta jornada de la Champions League</h3>
+<p>Tras los partidos de ayer, los equipos siguen disputando la fecha. Los partidos más llamativos son: AEK Atenas vs. Real Madrid y RB Leipzig vs. Man. City.</p>
+</div>
+</a>
+</article>
+
+<article class="news-card" data-category="Internacional" data-title="uefa reúne a los 36 equipos de la champions 2026 27">
+<a class="card-link" href="https://es.uefa.com/uefachampionsleague/news/02aa-21f1370b8e7d-c9ad7642e7a3-1000--previa-de-la-jornada-4-de-la-champions-league-datos-clave-/?utm_source=chatgpt.com">
+<div class="art"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\livvsfen.jpg" alt="Liverpool y Fenerbahçe"></div>
+<div class="card-body">
+<div class="meta">Internacional · UEFA</div>
+<h3>Liverpool afronta una prueba exigente en Turquía por la Champions.</h3>
+<p>El conjunto inglés visitará al Fenerbahçe en uno de los encuentros destacados de la cuarta jornada.</p>
+</div>
+</a>
+</article>
+
+</div>
+<p class="empty" id="empty">No encontramos noticias con esa búsqueda.</p>
+</section>
+
+
+
+<section id="LPF">
+<div class="section-head">
+  <h2>La agenda del fútbol argentino</h2>
+  <span>Fecha 16 · Clausura 2026</span>
+</div>
+
+<div class="local-grid">
+
+<!-- JUEVES 5 -->
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/aldosivi-vs-river-plate/egddcaa">
+<div class="match">
+<div>
+<small>Jueves 5 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\aldosivi.webp" alt=""> Aldosivi</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\river.webp" alt=""> River</span>
+</h3>
+<p>Estadio José María Minella · Mar del Plata · Zona B</p>
+</div>
+<time>15:00</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/gimnasia-la-plata-vs-belgrano/egddbjj">
+<div class="match">
+<div>
+<small>Jueves 5 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\gimnasia.webp" alt=""> Gimnasia (LP)</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\belgrano.png" alt=""> Belgrano</span>
+</h3>
+<p>Estadio Juan Carmelo Zerillo · La Plata · Zona B</p>
+</div>
+<time>19:15</time>
+</div>
+</a>
+
+<!-- VIERNES 6 -->
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/barracas-central-vs-racing-club/egddcab">
+<div class="match">
+<div>
+<small>Viernes 6 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\barracas.svg" alt=""> Barracas Central</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\racing.webp" alt=""> Racing</span>
+</h3>
+<p>Estadio Claudio "Chiqui" Tapia · CABA · Zona B</p>
+</div>
+<time>15:00</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/san-lorenzo-vs-platense/egddcba">
+<div class="match">
+<div>
+<small>Viernes 6 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\sanlorenzo.png" alt=""> San Lorenzo</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\platense.png" alt=""> Platense</span>
+</h3>
+<p>Estadio Pedro Bidegain - Nuevo Gasómetro · Bajo Flores · Zona A</p>
+</div>
+<time>19:15</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/independiente-vs-riestra/egddcag">
+<div class="match">
+<div>
+<small>Viernes 6 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\independiente.webp" alt=""> Independiente</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\riestra.webp" alt=""> Deportivo Riestra</span>
+</h3>
+<p>Estadio Libertadores de América · Avellaneda · Zona A</p>
+</div>
+<time>19:15</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/union-santa-fe-vs-velez-sarsfield/egddcaj">
+<div class="match">
+<div>
+<small>Viernes 6 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\union.webp" alt=""> Unión</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\velez.webp" alt=""> Vélez</span>
+</h3>
+<p>Estadio 15 de Abril · Santa Fe · Zona A</p>
+</div>
+<time>19:15</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/tigre-vs-sarmiento-junin/egddcac">
+<div class="match">
+<div>
+<small>Viernes 6 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\tigre.webp" alt=""> Tigre</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\sarmiento.webp" alt=""> Sarmiento</span>
+</h3>
+<p>Estadio José Dellagiovanna · Victoria · Zona B</p>
+</div>
+<time>22:00</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/banfield-vs-atletico-tucuman/egddcae">
+<div class="match">
+<div>
+<small>Viernes 6 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\banfield.png" alt=""> Banfield</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\atleticotucuman.webp" alt=""> Atlético Tucumán</span>
+</h3>
+<p>Estadio Florencio Sola · Sur de Buenos Aires · Zona B</p>
+</div>
+<time>22:00</time>
+</div>
+</a>
+
+<!-- SÁBADO 7 -->
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/gimnasia-mendoza-vs-independiente-rivadavia/egddcbc">
+<div class="match">
+<div>
+<small>Sábado 7 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\gimnasiamza.webp" alt=""> Gimnasia (M)</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\independienterivadavia.webp" alt=""> Independiente Rivadavia</span>
+</h3>
+<p>Estadio Victor Antonio Legrotaglie · Mendoza · Interzonal</p>
+</div>
+<time>15:00</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/talleres-cordoba-vs-estudiantes-de-la-plata/egddcah">
+<div class="match">
+<div>
+<small>Sábado 7 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\talleres.webp" alt=""> Talleres</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\estudiantes.webp" alt=""> Estudiantes (LP)</span>
+</h3>
+<p>Estadio Mario Alberto Kempes · Córdoba · Zona A</p>
+</div>
+<time>15:00</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/argentinos-juniors-vs-huracan/egddcad">
+<div class="match">
+<div>
+<small>Sábado 7 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\argentinosjrs.webp" alt=""> Argentinos</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\huracan.webp" alt=""> Huracán</span>
+</h3>
+<p>Estadio Diego Armando Maradona · La Paternal · Zona B</p>
+</div>
+<time>17:30</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/rosario-central-vs-estudiantes-rio-cuarto/egddbji">
+<div class="match">
+<div>
+<small>Sábado 7 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\roscentral.png" alt=""> Rosario Central</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\estudiantesrc.webp" alt=""> Estudiantes (RC)</span>
+</h3>
+<p>Estadio Gigante de Arroyito · Rosario · Zona B</p>
+</div>
+<time>17:30</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/boca-juniors-vs-defensa-y-justicia/egddcaf">
+<div class="match">
+<div>
+<small>Sábado 7 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\boca.webp" alt=""> Boca</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\defensa.png" alt=""> Defensa y Justicia</span>
+</h3>
+<p>Estadio La Bombonera · Buenos Aires · Zona A</p>
+</div>
+<time>17:30</time>
+</div>
+</a>
+
+<!-- DOMINGO 8 -->
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/central-cordoba-sde-vs-lanus/egddcbb">
+<div class="match">
+<div>
+<small>Domingo 8 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\centralcordoba.webp" alt=""> Central Córdoba</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\lanus.png" alt=""> Lanús</span>
+</h3>
+<p>Estadio Único Madre de Ciudades · Santiago del Estero · Zona A</p>
+</div>
+<time>19:30</time>
+</div>
+</a>
+
+<a class="match-link" href="https://www.promiedos.com.ar/game/instituto-ac-cordoba-vs-newell's-old-boys/egddcai">
+<div class="match">
+<div>
+<small>Domingo 8 de noviembre</small>
+<h3 class="match-teams">
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\instituto.png" alt=""> Instituto</span>
+<span>vs.</span>
+<span class="team"><img src="C:\Users\Lucas\Downloads\pagina juego abierto\escudos\newells.webp" alt=""> Newell's</span>
+</h3>
+<p>Estadio Monumental de Alta Córdoba · Córdoba · Zona A</p>
+</div>
+<time>22:00</time>
+</div>
+</a>
+
+</div>
+</section>
+
+
+<section id="regional">
+  <div class="section-head">
+    <h2>El fútbol de la región</h2>
+    <span>Argentina · Regiones</span>
+  </div>
+
+  <a class="story-link" href="https://www.futbolregional.com.ar/">
+    <div class="story-band">
+      <div>
+        <div class="eyebrow">Radar regional</div>
+        <h2>Las historias también pasan cerca</h2>
+        <p>Un espacio para seguir a los clubes, protagonistas y competencias de Rosario y Santa Fe.</p>
+      </div>
+      <div class="art">
+        <img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\argentina.png" alt="Fútbol argentino">
+      </div>
+    </div>
+  </a>
+</section>
+
+<section id="calculadora">
+  <div class="section-head">
+    <h2>Calcula los resultados del fútbol</h2>
+    <span>Calculadora · Ligas</span>
+  </div>
+
+  <a class="story-link" href="https://copero.com.ar/futbol/liga-profesional/calculadora">
+    <div class="story-band">
+      <div>
+        <div class="eyebrow">Probalo acá</div>
+        <h2>Calcula el puntaje de tu equipo favorito</h2>
+        <p>Posibles resultados, cambios en la tabla y campeones.</p>
+      </div>
+      <div class="art">
+        <img src="C:\Users\Lucas\Downloads\pagina juego abierto\imagenes\calculadora.png" alt="Calculadora de resultados">
+      </div>
+    </div>
+  </a>
+</section>
+
+<div class="sources"><strong>Fuentes consultadas:</strong> <a href="https://www.afa.com.ar/es/posts/cronograma-de-la-fecha-16-de-la-liga-profesional">AFA</a> · <a href="https://www.reuters.com/sports/soccer/argentina-name-first-squad-post-messi-era-november-friendlies-2026-11-03/">Reuters</a> · <a href="https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/">UEFA</a> · <a href="https://rosariodeportes.com/central-definira-la-tabla-anual-el-sabado-y-newells-cerrara-el-clausura-el-domingo/">Rosario Deportes</a>. Las noticias de esta maqueta corresponden al 4 de noviembre de 2026; los enlaces llevan a las coberturas originales.</div>
+</main>
+<footer><div class="wrap foot"><strong>JUEGO <span>ABIERTO</span></strong><span>Fútbol, actualidad e historias. · Proyecto editorial independiente.</span></div></footer>
+<script>
+const menu=document.getElementById('menu'),nav=document.getElementById('nav');
+menu.addEventListener('click',()=>nav.classList.toggle('open'));
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+const buttons=[...document.querySelectorAll('.filter')],cards=[...document.querySelectorAll('.news-card')],search=document.getElementById('search'),empty=document.getElementById('empty');
+let active='Todas';
+function update(){let q=search.value.toLocaleLowerCase('es');let shown=0;cards.forEach(c=>{let category=c.dataset.category||'',title=c.dataset.title||'';let ok=(active==='Todas'||category.includes(active))&&(title.includes(q)||c.innerText.toLocaleLowerCase('es').includes(q));c.style.display=ok?'':'none';if(ok)shown++});empty.style.display=shown?'none':'block'}
+buttons.forEach(b=>b.addEventListener('click',()=>{active=b.dataset.filter;buttons.forEach(x=>x.classList.toggle('active',x===b));update()}));
+search.addEventListener('input',update);
+</script>
+</body>
+</html>
